@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import hanzi from "hanzi";
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
+
 
 enum Modes {
   QUESTION = "question",
@@ -16,6 +18,8 @@ function App() {
   const [mode, setMode] = useState(Modes.WAIT);
   const [count, setCount] = useState(1);
   const [question, setQuestion] = useState(hanzi.getCharacterInFrequencyListByPosition(111));
+
+  const { transcript, resetTranscript } = useSpeechRecognition()
 
   useEffect(() => {
     hanzi.start()
@@ -45,6 +49,9 @@ function App() {
       <p>
         Meaning: {question && question.meaning}
       </p>
+      <button onClick={() => { SpeechRecognition.startListening() }}>Start</button>
+      <button onClick={SpeechRecognition.stopListening}>Stop</button>
+      <p>{transcript}</p>
     </div>
   );
 }
